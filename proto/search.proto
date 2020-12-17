@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-package proto;
+package mblog.search.v1;
+option go_package = "github.com/soooldier/grpc/gen/go/mblog/search/v1";
 
 service SearchService {
     rpc Search (SearchRequest) returns (SearchResponse);
