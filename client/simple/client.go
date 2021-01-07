@@ -2,10 +2,9 @@ package main
 
 import (
 	"context"
-	"log"
-
 	pb "github.com/soooldier/grpc/proto"
 	"google.golang.org/grpc"
+	"log"
 )
 
 const PORT = "9001"

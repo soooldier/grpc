@@ -1,10 +1,16 @@
 syntax = "proto3";
 
-package mblog.search.v1;
-option go_package = "github.com/soooldier/grpc/gen/go/mblog/search/v1";
+package proto;
+
+import "google/api/annotations.proto";
 
 service SearchService {
-    rpc Search (SearchRequest) returns (SearchResponse);
+    rpc Search (SearchRequest) returns (SearchResponse) {
+        option (google.api.http) = {
+            post: "/cc"
+            body: "*"
+          };
+    }
 }
 
 message SearchRequest {

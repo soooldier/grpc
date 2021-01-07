@@ -3,14 +3,14 @@ package main
 import (
 	"context"
 	"log"
-	"net"
+	"net/http"
 	"runtime/debug"
+	"strings"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	pb "github.com/soooldier/grpc/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 )
 
@@ -48,10 +48,18 @@ func main() {
 	}
 	server := grpc.NewServer(opts...)
 	pb.RegisterSearchServiceServer(server, &SearchService{})
-	listen, err := net.Listen("tcp", ":"+PORT)
-	if err != nil {
-		log.Fatalf("net.Listen err: %v", err)
-	}
-	reflection.Register(server)
-	server.Serve(listen)
+	http.ListenAndServe(":"+PORT, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.ProtoMajor == 2 && strings.Contains(r.Header.Get("Content-type"), "application/grpc") {
+			server.ServeHTTP(w, r)
+		} else {
+		}
+	}))
+
+
+	//listen, err := net.Listen("tcp", ":"+PORT)
+	//if err != nil {
+	//	log.Fatalf("net.Listen err: %v", err)
+	//}
+	//reflection.Register(server)
+	//server.Serve(listen)
 }
